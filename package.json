@@ -4,8 +4,17 @@
   "description": "",
   "main": "app.js",
   "scripts": {
+    "start": "nodemon server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Jonathan Navarrete <jonatns@gmail.com>",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.15.2",
+    "express": "^4.14.0"
+  },
+  "devDependencies": {
+    "cors": "^2.8.1",
+    "nodemon": "^1.11.0"
+  }
 }
