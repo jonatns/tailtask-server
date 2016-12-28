@@ -1,0 +1,11 @@
+{
+  "db": {
+    "dbConfig": {
+      "username": "",
+      "password": "",
+      "host": "localhost",
+      "port": 27017,
+      "dbName": "tailtask_db"
+    }
+  }
+}

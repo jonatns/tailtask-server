@@ -2,19 +2,22 @@
   "name": "tailtask-server",
   "version": "1.0.0",
   "description": "",
-  "main": "app.js",
+  "main": "index.js",
   "scripts": {
-    "start": "nodemon server.js",
+    "start": "nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Jonathan Navarrete <jonatns@gmail.com>",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.15.2",
-    "express": "^4.14.0"
+    "config": "^1.24.0",
+    "express": "^4.14.0",
+    "mongodb": "^2.2.16"
   },
   "devDependencies": {
     "cors": "^2.8.1",
+    "morgan": "^1.7.0",
     "nodemon": "^1.11.0"
   }
 }
