@@ -13,7 +13,7 @@ module.exports = {
       var attribute = attributes[i];
       data.attributes[''+attribute+''] = model[''+attribute+''];
     }
-    for(var i = 0; i < relationships.length; i++) {
+    for(i = 0; i < relationships.length; i++) {
       var relationship = relationships[i];
       data.relationships[''+relationship+''] = {
         'data': {
@@ -24,4 +24,4 @@ module.exports = {
     }
     return data;
   }
-}
+};

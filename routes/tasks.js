@@ -72,4 +72,4 @@ module.exports = (app, router, db) => {
   });
 
   app.use('/api/tasks', router);
-}
+};

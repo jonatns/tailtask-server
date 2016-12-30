@@ -7,4 +7,4 @@ module.exports = (app, express, db) => {
     var router = express.Router();
     require('./' + name)(app, router, db);
   });
-}
+};
