@@ -3,6 +3,7 @@ const express = require('express'),
   morgan = require('morgan'),
   cors = require('cors'),
   bodyParser = require('body-parser'),
+  bearerToken = require('express-bearer-token'),
   db = require('./model/db');
 
 app.use(morgan('dev'));
@@ -10,6 +11,9 @@ app.use(function(req, res, next) {
   req.headers['if-none-match'] = 'no-match-for-this';
   next();
 });
+
+app.use(bearerToken());
+
 app.use(cors());
 app.use(bodyParser.json({type: 'application/vnd.api+json'}));
 app.use(bodyParser.json({type: 'application/json'}));

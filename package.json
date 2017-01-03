@@ -13,6 +13,7 @@
     "body-parser": "^1.15.2",
     "config": "^1.24.0",
     "express": "^4.14.0",
+    "express-bearer-token": "^2.1.0",
     "jsonwebtoken": "^7.2.1",
     "mongodb": "^2.2.16",
     "password-generator": "^2.1.0"

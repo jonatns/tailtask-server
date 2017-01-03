@@ -2,22 +2,37 @@ module.exports = (app, router, db) => {
 
   const Serializer = require('../serializers/tasks');
   const ObjectId = require('mongodb').ObjectId;
+  const AuthService = require('.././services/auth');
 
   router.get('/', (req, res) => {
     const tasks = db.getDb().collection('tasks');
-    tasks.find().toArray((err, result) => {
-      if(err) {
-        res.status(404).send({
-          message: 'Error getting tasks'
+    AuthService.verifyToken(req.token, decoded => {
+      if(!decoded) {
+        return res.status(401).send({
+          message: 'Token expired or no token at all'
         });
       }
-      var data = [];
-      result.forEach(function(task) {
-        var taskData = Serializer.serialize(task, 'task');
-        data.push(taskData);
-      });
-      return res.status(200).send({
-        data: data
+      AuthService.getCurrentUser(decoded, user => {
+        if(!user) {
+          return res.status(401).send({
+            message: 'Invalid user generated from token'
+          });
+        }
+        tasks.find({company_id: user.company_id}).toArray((err, result) => {
+          if(err) {
+            return res.status(404).send({
+              message: 'Error getting tasks'
+            });
+          }
+          var data = [];
+          result.forEach(function(task) {
+            var taskData = Serializer.serialize(task, 'task');
+            data.push(taskData);
+          });
+          return res.status(200).send({
+            data: data
+          });
+        });
       });
     });
   });
@@ -30,7 +45,7 @@ module.exports = (app, router, db) => {
       user_ids: []
     }, (err, result) => {
       if(err) {
-        res.status(404).send({
+        return res.status(404).send({
           message: 'Error getting tasks'
         });
       }
@@ -58,7 +73,6 @@ module.exports = (app, router, db) => {
         "user_ids": user_ids
       },  function(err, result) {
       if(err) {
-        console.log(err);
         return res.status(404).send({
           message: 'Error adding user into task'
         });
