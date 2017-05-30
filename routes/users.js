@@ -3,22 +3,37 @@ module.exports = (app, router, db) => {
   const Serializer = require('../serializers/users');
   const generatePassword = require('password-generator');
   const ObjectId = require('mongodb').ObjectId;
+  const AuthService = require('.././services/auth');
 
   router.get('/', (req, res) => {
     const users = db.getDb().collection('users');
-    users.find().toArray((err, result) => {
-      if(err) {
-        res.status(404).send({
-          message: 'Error getting users'
+    AuthService.verifyToken(req.token, decoded => {
+      if(!decoded) {
+        return res.status(401).send({
+          message: 'Token expired or no token at all'
         });
       }
-      var data = [];
-      result.forEach(function(user) {
-        var userData = Serializer.serialize(user, 'user');
-        data.push(userData);
-      });
-      return res.status(200).send({
-        data: data
+      AuthService.getCurrentUser(decoded, user => {
+        if(!user) {
+          return res.status(401).send({
+            message: 'Invalid user generated from token'
+          });
+        }
+        users.find({company_id: user.company_id}).toArray((err, result) => {
+          if(err) {
+            res.status(404).send({
+              message: 'Error getting users'
+            });
+          }
+          var data = [];
+          result.forEach(function(user) {
+            var userData = Serializer.serialize(user, 'user');
+            data.push(userData);
+          });
+          return res.status(200).send({
+            data: data
+          });
+        });
       });
     });
   });
@@ -41,6 +56,22 @@ module.exports = (app, router, db) => {
       }
       var userData = Serializer.serialize(result.ops[0], 'user');
       return res.status(201).send({
+        data: userData
+      });
+    });
+  });
+
+  router.get('/:id', function(req, res) {
+    const users = db.getDb().collection('users');
+    const id = new ObjectId(req.params.id);
+    users.findOne({_id: id}, function(err, result) {
+      if(err) {
+        res.status(404).send({
+          message: 'Error trying to get user'
+        });
+      }
+      var userData = Serializer.serialize(result, 'user');
+      return res.status(200).send({
         data: userData
       });
     });

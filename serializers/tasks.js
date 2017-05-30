@@ -1,6 +1,8 @@
 const attributes = [
   'title',
-  'description'
+  'description',
+  'company_id',
+  'location'
 ];
 
 const relationships = [
@@ -13,7 +15,15 @@ module.exports = {
 
     for(var i = 0; i < attributes.length; i++) {
       var attribute = attributes[i];
-      data.attributes[''+attribute+''] = model[''+attribute+''];
+      if(attribute === 'location') {
+        if(model.location !== undefined) {
+          data.attributes[''+attribute+''] = model.location.coordinates;
+        } else {
+          data.attributes[''+attribute+''] = null;
+        }
+      } else {
+        data.attributes[''+attribute+''] = model[''+attribute+''];
+      }
     }
 
     // Generate users relationship

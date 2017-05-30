@@ -32,7 +32,7 @@ module.exports = function(app, router, db) {
 
   router.post('/refresh', function(req, res) {
     const users = db.getDb().collection('users');
-    AuthService.verifyToken(req.token, decoded => {
+    AuthService.verifyToken(req.body.token, decoded => {
       if(!decoded) {
         return res.status(401).send({
           message: 'Token expired or no token at all'
